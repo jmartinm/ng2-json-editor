@@ -2,16 +2,23 @@ notifications:
   email: false
 language: node_js
 node_js:
-- '5'
+- '6.9.1'
 - node
 sudo: false
+cache: yarn
+env:
+  global:
+    - GH_REF: 'github.com/inveniosoftware-contrib/ng2-json-editor.git'
+    - secure: "ADy9msRP4y7zXAQNVOhq2EeIFDsMAIcvJcWKEfyUx9yXXGA0EkIM5FXpeTzGDWBLpvl/KSWFZAAW6uVJivh+fxnTJQsiF6tC6TmOLnI7xC30RS1LUSc+XXrqwfArJY9dBLIxoMly0ZLDiJcdWTZy0UmhMUT3gEl0Y3kaY3j8tp/9yRc1Br/Ctxq4b8lW7jGkUutirXt+MqBCbJcUYxsCJ9Zx2x5f5H1CktTa9IIxgRPqzjVtHa/Mj2Qxm8Fpv34aV0QyrjRIkSZRl2wO1MYqd/CRYyII+jsm8lXOk7gyZu3lS0V90Tg7XfucDmMriLUz8BhB4ZM28E1m0rsplCdpoH+DSzlK42zXjADuPFODmqj5SndO2GkuQouuWC8wbaR+MyDoCZ+nwL51jANQbh0SLQDTYE7Z6Kx18PCXy4U0exK9Emhd2p39DAmNbIKT11lr2a/mR8aAJ4P1h8SBZoXsXj7UWnOvUGEV3cEBs6qyo57GYW59CCBFd1brO9htfKNZ3/yGR9yvdbhNxVsIx1WtQQuVtXLsBkYL3Ws8Q1TMQASfARXS/gbo0JdzL+ICEhWHbSO/rwkvHvkEnxe4048OCZmWzNDAKjdJkHzAm65xCg24l8g7J9MVkkTXHbhIOIPFu66jL8sBE4tKPDB4uNVVHLQq3NoBu8LY5+y20gfRxyM="
 before_install:
   - npm install buffer-shims
   - export CHROME_BIN=chromium-browser
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 before_deploy: npm run build
-after_success: npm run coveralls
+after_success:
+  - npm run coveralls
+  - ./deploy-gh-pages.sh
 deploy:
   provider: npm
   skip_cleanup: true
@@ -22,3 +29,4 @@ deploy:
     tags: true
     repo: inveniosoftware-contrib/ng2-json-editor
     all_branches: true
+    node: '6.9.1'
